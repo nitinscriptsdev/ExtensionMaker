@@ -1,3 +1,6 @@
+Import = require "import"
+Environment = Import("android.os.Environment")
+
 local Update = {}
 
 local constants = require "libs.constants"
@@ -98,6 +101,43 @@ if onError then
 onError(Error)
 end
 end)
+end
+
+function Update.downloadPackage(url, path, onSuccess, onError)
+    Http.download(url, path, function(status_code, response)
+        if status_code == 200 then
+            local file = io.open(path, "r")
+
+            if file then
+                file:close()
+
+                if onSuccess then
+                    onSuccess(path)
+                end
+            else
+                if onError then
+                    onError("Download completed, but the file was not found.")
+                end
+            end
+        else
+            if onError then
+                onError(
+                    "Download failed. HTTP status code: "
+                    .. tostring(status_code)
+                    .. " Response: "
+                    .. tostring(response)
+                )
+            end
+        end
+    end)
+end
+
+function Update.getDownloadPath()
+    local downloadDir = Environment.getExternalStoragePublicDirectory(
+        Environment.DIRECTORY_DOWNLOADS
+    )
+
+    return tostring(downloadDir) .. "/ExtensionMaker.ppk"
 end
 
 return Update

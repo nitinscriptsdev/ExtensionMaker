@@ -3,6 +3,7 @@ LinearLayout = Import("android.widget.LinearLayout")
 TextView = Import("android.widget.TextView")
 Button = Import("android.widget.Button")
 ScrollView = Import("android.widget.ScrollView")
+Toast = Import("android.widget.Toast")
 EditText = Import("android.widget.EditText")
 App = require "libs.app"
 Account = require "libs.account"
@@ -10,6 +11,56 @@ Storage = require "libs.storage"
 Api = require "libs.api"
 Constants = require "libs.constants"
 Update = require "libs.update"
+
+-- Check for update
+Update.checkForUpdate(
+"https://raw.githubusercontent.com/nitinscriptsdev/ExtensionMaker/main/version.json",
+function(updateData)
+if updateData then
+
+App.createDialog({
+title = "Update Available",
+message = "Version " .. updateData.version .. " is available.\n\n" .. updateData.notes,
+
+positiveButtonText = "Update",
+positiveButtonFunction = function()
+
+local downloadPath = Update.getDownloadPath()
+
+Update.downloadPackage(
+updateData.downloadUrl,
+downloadPath,
+
+function(path)
+Toast.makeText(
+    this,
+    "Update downloaded successfully.\n\nThe new ExtensionMaker.ppk has been saved to your Downloads folder.\n\nOpen Jieshuo and import this file to install the update.",
+    Toast.LENGTH_LONG
+).show()
+end,
+
+function(errorMessage)
+App.dialog(
+"Download Failed",
+"The update could not be downloaded.\n\nPlease check your internet connection and try again later.\n\nError: "..tostring(errorMessage)
+)
+end
+)
+
+end,
+
+negativeButtonText = "Later",
+negativeButtonFunction = function()
+
+end
+})
+
+end
+end,
+function(errorMessage)
+-- Ignore update-check errors for now
+end
+)
 
 -- Show ExtensionMaker setup screen
  local app_role = Storage.has_app_role()
@@ -95,13 +146,6 @@ orientation="vertical",
 },
 }
 
-local feedbackLayout = {
-EditText,
-id="user_feedback",
-hint="What is your suggestion? ",
-layout_width="fill",
-layout_height="wrap",
-}
 
 local dialog = LuaDialog()
 dialog.setTitle("ExtensionMaker")
@@ -110,18 +154,12 @@ dialog.setNegativeButton("Close", nil)
 dialog.show()
 
 function feedbackBTN.onClick()
-local dialog = LuaDialog()
-dialog.setTitle("Send Feedback or Suggestion")
-dialog.setView(loadlayout(feedbackLayout))
-dialog.setPositiveButton("Send", function()
-local feedbackText = tostring(user_feedback.text)
-
-App.	sendFeedback(feedbackText, function(status, result)
-App.dialog(status, result)
+App.sendFeedback(function(err)
+if err then
+App.dialog("Error", err)
+end
 end)
-end)
-dialog.setNegativeButton("Cancel", nil)
-dialog.show()
+dialog.dismiss()
 end
 
 function addNew(new)
@@ -167,3 +205,4 @@ end
 function settingsBTN.onClick()
 App.showSettingsScreen()
 end
+

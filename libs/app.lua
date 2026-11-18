@@ -1,6 +1,7 @@
 Import = require "import"
 Toast = Import("android.widget.Toast")
 Context = Import("android.content.Context")
+Intent = Import("android.content.Intent")
 ClipData = Import("android.content.ClipData")
 Uri = Import("android.net.Uri")
 Http = Import("com.androlua.Http")
@@ -13,8 +14,11 @@ EditText = Import("android.widget.EditText")
 Constants = require "libs.constants"
 Build = Import("android.os.Build")
 Storage = require "libs.storage"
+Api = require "libs.api"
 
 local app = {}
+
+
 
 function app.copyToClipboard(text)
 local clipboard = this.getSystemService(Context.CLIPBOARD_SERVICE)
@@ -136,21 +140,16 @@ luaDialog.setButton("OK", nil)
 luaDialog.show()
 end
 
-function app.sendFeedback(user_text, onResult)
-local BOT_TOKEN = Constants.BOT_TOKEN
-local CHAT_ID = Constants.CHAT_ID
-local fullMessage = "New feedback from 'ExtensionMaker' jieshuo extension\n\n\n"..user_text.."\n\n\nDevice: "..Build.MODEL
-local encoded = Uri.encode(fullMessage)
-local url = "https://api.telegram.org/bot"..BOT_TOKEN.."/sendMessage?chat_id="..CHAT_ID.."&text="..encoded
-
-Http.get(url, function(code, body)
-if code == 200 then
-onResult("SUCCESS", "Feedback Sent Successfully!")
-else
-onResult("FAILED", "Failed: "..tostring(body))
-end
+function app.sendFeedback(onError)
+local url = Uri.parse("https://wa.me/message/BCZXZJR62L25D1")
+local ok, err = pcall(function()
+local intent = Intent(Intent.ACTION_VIEW, url)
+this.startActivity(intent)
 end)
-end
 
+if not ok then
+onError("Error: "..tostring(err))
+end
+end
 
 return app

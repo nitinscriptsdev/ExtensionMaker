@@ -25,4 +25,35 @@ end)
 
 end
 
+function api.sendFeedback(message, onSuccess, onError)
+    local url = constants.FEEDBACK_API_URL
+
+    if url == nil or url == "" then
+        return onError("Feedback API URL is not configured.")
+    end
+
+    local payload = json.encode({
+        message = message,
+        appVersion = constants.APP_VERSION,
+        device = tostring(Build.MODEL)
+    })
+
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+
+    Http.post(url, payload, headers, function(status_code, response)
+        if status_code == 200 then
+            return onSuccess(response)
+        else
+            return onError(
+                "HTTP status code: " ..
+                tostring(status_code) ..
+                " Response: " ..
+                tostring(response)
+            )
+        end
+    end)
+end
+
 return api

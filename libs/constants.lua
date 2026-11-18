@@ -56,6 +56,7 @@ constants.DEFAULT_CREATION_PROMPT="Act as a senior Lua and AndroLua Developer.\n
 
 constants.AVAILABLE_TOOLS = {"AI Assistant", "Jieshuo Services", "Jieshuo Details"}
 constants.SETTINGS_FEATURES = {"Feedback"}
+constants.FEEDBACK_API_URL = ""
 constants.BOT_TOKEN = Storage.get_bot_token()
 constants.CHAT_ID =Storage.get_chat_id()
 
