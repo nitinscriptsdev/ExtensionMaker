@@ -176,15 +176,25 @@ extensionsList.addView(code)
 extensionsList.addView(copy)
 end
 
+function cleanResponse(response)
+if type(response) ~= "string" then
+return ""
+end
+
+response = response:gsub("^%s*```%w*%s*", "")
+response = response:gsub("%s*```%s*$", "")
+
+return response
+end
 
 function generateNew.onClick()
 local prompt = Constants.DEFAULT_PROMPT
 
 Api.getGeminiResponse(tostring(prompt), function(message)
-addNew(message)
+addNew(cleanResponse(message))
 end,
 function(message)
-addNew(message)
+addNew(cleanResponse(message))
 end)
 end
 
@@ -194,10 +204,10 @@ local system_prompt = Constants.DEFAULT_CREATION_PROMPT
 local prompt = system_prompt .. user_request
 
 Api.getGeminiResponse(tostring(prompt), function(message)
-addNew(message)
+addNew(cleanResponse(message))
 end,
 function(message)
-addNew(message)
+addNew(cleanResponse(message))
 end)
 
 end
