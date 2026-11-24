@@ -142,6 +142,15 @@ layout_weight=1,
 LinearLayout,
 id="extensionsList",
 orientation="vertical",
+
+{
+TextView,
+id="generationStatus",
+text="",
+layout_width="fill",
+layout_height="wrap",
+},
+
 },
 },
 }
@@ -190,11 +199,30 @@ end
 function generateNew.onClick()
 local prompt = Constants.DEFAULT_PROMPT
 
+-- Show generation message
+generationStatus.setText("Generating...")
+
+-- Disable create and generate new buttons
+createBTN.setEnabled(false)
+generateNew.setEnabled(false)
+
+-- Send request to AI
 Api.getGeminiResponse(tostring(prompt), function(message)
+
+-- Add AI response
 addNew(cleanResponse(message))
+
+-- Hide generation status
+generationStatus.setText("")
+
+-- Enable create and generate new buttons
+createBTN.setEnabled(true)
+generateNew.setEnabled(true)
 end,
 function(message)
-addNew(cleanResponse(message))
+
+-- Add tokens details
+addNew(message)
 end)
 end
 
@@ -203,11 +231,30 @@ local user_request = tostring(creationET.text)
 local system_prompt = Constants.DEFAULT_CREATION_PROMPT
 local prompt = system_prompt .. user_request
 
+-- Show generation message
+generationStatus.setText("Generating...")
+
+-- Disable create and generate new buttons
+createBTN.setEnabled(false)
+generateNew.setEnabled(false)
+
+-- Send response to AI
 Api.getGeminiResponse(tostring(prompt), function(message)
+
+-- Show AI response
 addNew(cleanResponse(message))
+
+-- Hide generation status
+generationStatus.setText("")
+
+-- Enable create and generate new buttons
+createBTN.setEnabled(true)
+generateNew.setEnabled(true)
 end,
 function(message)
-addNew(cleanResponse(message))
+
+-- Add tokens details
+addNew(message)
 end)
 
 end

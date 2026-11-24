@@ -3,8 +3,8 @@ json = require "cjson"
 
 local constants = {}
 
-constants.APP_VERSION = "1.1-beta.1"
-constants.APP_VERSION_CODE = 2
+constants.APP_VERSION = "1.1-beta.2"
+constants.APP_VERSION_CODE = 3
 
 constants.GEMINI_API_LINK = "https://generativelanguage.googleapis.com"
 constants.GEMINI_API_VERSION = "v1beta"
