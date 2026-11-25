@@ -1,6 +1,6 @@
 {
-  "version": "1.1-beta.2",
-  "versionCode": 3,
-  "downloadUrl": "https://github.com/nitinscriptsdev/ExtensionMaker/releases/download/v1.1-beta.2/ExtensionMaker.ppk",
-  "notes": "Beta release with improved code generation."
+  "version": "1.1-beta.3",
+  "versionCode": 4,
+  "downloadUrl": "https://github.com/nitinscriptsdev/ExtensionMaker/releases/download/v1.1-beta.3/ExtensionMaker.ppk",
+  "notes": "Beta release with improved download and import system."
 }

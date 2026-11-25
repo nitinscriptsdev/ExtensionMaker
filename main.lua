@@ -32,11 +32,9 @@ updateData.downloadUrl,
 downloadPath,
 
 function(path)
-Toast.makeText(
-    this,
-    "Update downloaded successfully.\n\nThe new ExtensionMaker.ppk has been saved to your Downloads folder.\n\nOpen Jieshuo and import this file to install the update.",
-    Toast.LENGTH_LONG
-).show()
+
+-- Open downloaded package for import
+service.installApk(downloadPath)
 end,
 
 function(errorMessage)
@@ -52,6 +50,8 @@ end,
 negativeButtonText = "Later",
 negativeButtonFunction = function()
 
+-- Speak later message
+service.speak("Later")
 end
 })
 
