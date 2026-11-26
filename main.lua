@@ -199,6 +199,9 @@ end
 function generateNew.onClick()
 local prompt = Constants.DEFAULT_PROMPT
 
+-- Toast message
+Toast.setText(this, "Processing start", Toast.LENGTH_LONG).show()
+
 -- Show generation message
 generationStatus.setText("Generating...")
 
@@ -208,6 +211,9 @@ generateNew.setEnabled(false)
 
 -- Send request to AI
 Api.getGeminiResponse(tostring(prompt), function(message)
+
+-- Toast message
+Toast.setText(this,"Processing complete", Toast.LENGTH_LONG).show()
 
 -- Add AI response
 addNew(cleanResponse(message))
@@ -231,6 +237,9 @@ local user_request = tostring(creationET.text)
 local system_prompt = Constants.DEFAULT_CREATION_PROMPT
 local prompt = system_prompt .. user_request
 
+-- Toast message
+Toast.setText(this, "Processing start", Toast.LENGTH_LONG).show()
+
 -- Show generation message
 generationStatus.setText("Generating...")
 
@@ -240,6 +249,9 @@ generateNew.setEnabled(false)
 
 -- Send response to AI
 Api.getGeminiResponse(tostring(prompt), function(message)
+
+-- Toast message
+Toast.setText(this, "Processing complete", Toast.LENGTH_LONG).show()
 
 -- Show AI response
 addNew(cleanResponse(message))
